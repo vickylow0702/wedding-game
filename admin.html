@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <button id="start">START GAME</button>
+
+  <script type="module">
+    import { db } from './firebase.js';
+    import { ref, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    document.getElementById("start").onclick = () => {
+      set(ref(db, 'game/status'), 'playing');
+    };
+  </script>
+</body>
+</html>

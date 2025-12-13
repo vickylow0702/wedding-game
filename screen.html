@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard</title>
+</head>
+<body>
+  <h1>Leaderboard</h1>
+  <ul id="list"></ul>
+
+  <script type="module">
+    import { db } from './firebase.js';
+    import { ref, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    onValue(ref(db, 'players'), snap => {
+      const data = snap.val() || {};
+      const sorted = Object.values(data)
+        .filter(p => p.duration)
+        .sort((a,b)=>a.duration-b.duration)
+        .slice(0,10);
+
+      document.getElementById("list").innerHTML =
+        sorted.map(p=>`<li>${p.name} - ${p.duration}s</li>`).join("");
+    });
+  </script>
+</body>
+</html>

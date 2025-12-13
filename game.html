@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>GLOW IT</h2>
+  <button id="glowBtn">💧 GLOW IT</button>
+  <p id="info">Growing...</p>
+
+  <script type="module">
+    import { db } from './firebase.js';
+    import { ref, update } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const pid = new URLSearchParams(location.search).get("pid");
+    let clicks = 0;
+    const startTime = Date.now();
+
+    document.getElementById("glowBtn").onclick = () => {
+      clicks++;
+      document.getElementById("info").innerText = "Clicks: " + clicks;
+
+      if (clicks === 88) {
+        const duration = (Date.now() - startTime) / 1000;
+        update(ref(db, 'players/' + pid), {
+          clicks,
+          duration,
+          status: 'finished'
+        });
+        document.getElementById("info").innerText = "Finished in " + duration + "s";
+        document.getElementById("glowBtn").disabled = true;
+      }
+    };
+  </script>
+</body>
+</html>
